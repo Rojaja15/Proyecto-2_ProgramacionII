@@ -15,24 +15,47 @@ df["Date"] = pd.to_datetime(df["Date"])
 # Paleta de colores corporativa
 # ================================
 colores_empresas = {
-    "AMZN": "#2ca02c",  
-    "KO":   "#FF0000",   
-    "UBER": "#000000",   
-    "PEP":  "#005CB8",  
-    "TSLA": "#CC0000",   
-    "AAPL": "#1f77b4",   
-    "MSFT": "#BE8C00",   
-    "NVDA": "#76B900",   
-    "NFLX": "#E50914",   
-    "DIS":  "#113CCF",  
-    "NKE":  "#111111",   
-    "F":    "#003399",   
-    "WMT": "#0071CE",   
-    "PFE": "#0082D1",   
-    "META": "#4267B2",  
-    "GOOG": "#4285F4",  
-    "MA":   "#FF5F00",  
-    "V":    "#0057B8"  
+    # Tecnología
+    "AAPL": "#1f77b4",
+    "MSFT": "#BE8C00",
+    "NVDA": "#76B900",
+    "INTC": "#0071C5",
+    "CSCO": "#0096D6",
+
+    # Servicios de Comunicación
+    "META": "#4267B2",
+    "GOOG": "#4285F4",
+    "NFLX": "#E50914",
+    "DIS": "#113CCF",
+    "CMCSA": "#FFC300",
+
+    # Consumo Cíclico
+    "AMZN": "#2ca02c",
+    "TSLA": "#CC0000",
+    "NKE": "#111111",
+    "F": "#003399",
+    "SBUX": "#00704A",
+
+    # Consumo Defensivo
+    "KO": "#FF0000",
+    "PEP": "#005CB8",
+    "PG": "#01BFFF",
+    "MDLZ": "#9B30FF",
+    "BF-B": "#6B8E23",
+
+    # Servicios Financieros
+    "JPM": "#0070C0",
+    "V": "#0057B8",
+    "MA": "#FF5F00",
+    "GS": "#B8860B",
+    "AXP": "#2E77BB",
+
+    # Energía
+    "XOM": "#C70039",
+    "CVX": "#900C3F",
+    "BP": "#009639",
+    "TTE": "#E6B422",
+    "COP": "#FF8000"
 }
 
 # ================================
@@ -41,6 +64,14 @@ colores_empresas = {
 app_ui = ui.page_sidebar(
     ui.sidebar(
         ui.h2("Panel de Control", class_="my-3"),
+
+        # Nuevo filtro por industria
+        ui.input_selectize(
+            "industria",
+            "Seleccione industria:",
+            choices=list(industrias.keys()),
+            selected="Tecnología"
+        ),
 
         ui.input_selectize(
             "empresas",
@@ -96,6 +127,17 @@ app_ui = ui.page_sidebar(
 # Server
 # ================================
 def server(input, output, session):
+
+    # Actualiza empresas al cambiar industria
+    @reactive.effect
+    def _():
+        ind = input.industria()
+        if ind in industrias:
+            ui.update_selectize(
+                "empresas",
+                choices=industrias[ind],
+                selected=[industrias[ind][0]]
+            )
 
     @reactive.calc
     def datos_filtrados():

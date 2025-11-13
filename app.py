@@ -169,27 +169,6 @@ def server(input, output, session):
 
         plt.grid(True, linestyle="--", alpha=0.4)
         plt.tight_layout()
-
-    #Stock chart interactivo
-    @output
-    @render_widget
-    def grafico_stock():
-        data = df[
-            (df["Ticker"] == input.empresa_stock()) &
-            (df["Date"] >= input.rango_stock()[0]) &
-            (df["Date"] <= input.rango_stock()[1])
-        ]
-        if data.empty:
-            fig = px.line(title="No hay datos disponibles para el rango seleccionado.")
-        else:
-            fig = px.line(
-                data,
-                x="Date",
-                y="Close",
-                title=f"Precio histórico de {input.empresa_stock()}",
-                labels={"Close": "Precio de Cierre"},
-            )
-        return fig
 # ================================
 # Run app
 # ================================

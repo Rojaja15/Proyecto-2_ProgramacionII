@@ -5,8 +5,8 @@ import matplotlib.dates as mdates
 
 # ================================
 # Cargar datos
-# ================================
-df = pd.read_csv("Datos.csv")
+# ================================ 
+df = pd.read_csv("Datos.csv") #lectura del archivo CSV 
 df["Date"] = pd.to_datetime(df["Date"]).dt.date  # fechas sin hora
 
 # ================================
@@ -98,16 +98,30 @@ app_ui = ui.page_sidebar(
             step=1
         ),
     ),
-
-    ui.layout_column_wrap(
-        ui.card(
-            ui.card_header("Comparación del Precio de Cierre entre Empresas en USD"),
-            ui.output_plot("plot_acciones", width="100%", height=420)
+#aca es donde se camianza a hacer las pestañas 
+    ui.navset_tab(
+        #esta es la del grafico de rodigo
+        ui.nav_panel( 
+            "Comparación del Precio de Cierre entre Empresas en USD",
+            ui.layout_column_wrap(
+                ui.card(
+                ui.card_header("Comparación del Precio de Cierre entre Empresas en USD"),
+                ui.output_plot("plot_acciones", width="100%", height=420)
+                ),
+                column_size="100%"
         ),
-        column_size="100%"
+    ),
+    
+        ui.nav_panel(
+            "Tabla de Precios",
+            ui.card(
+                ui.card_header("tabla de precios"),
+                ui.output_data_frame("tabla_precios")
+            )
+        )
     ),
 
-    dark_theme
+dark_theme
 )
 
 # ================================
@@ -153,6 +167,14 @@ def server(input, output, session):
         plt.ylabel("Precio de Cierre", fontsize=11, color="white")
         plt.title("Evolución Histórica del Precio de Cierre", fontsize=13, weight="bold")
 
+    @output
+    @render.data_frame
+    def tabla_precios():
+        data = datos_filtrados()
+        columnas = ["Date", "Open", "High", "Low", "Close", "Volume", "Ticker"]
+        data[columnas[1:5]] = data[columnas[1:5]].round(2) 
+        return data[columnas].sort_values(by=["Ticker", "Date"])
+    
         # ✅ Leyenda mejorada para fondo oscuro
         legend = plt.legend(
             title="Empresas",

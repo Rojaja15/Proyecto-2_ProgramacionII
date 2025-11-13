@@ -6,10 +6,9 @@ import plotly.express as px
 # ================================
 # Cargar datos
 # ================================
-df = pd.read_csv("Datos.csv")
 
-# Convertir fechas correctamente (datetime, NO .dt.date)
-df["Date"] = pd.to_datetime(df["Date"])  
+df = pd.read_csv("Datos.csv")
+df["Date"] = pd.to_datetime(df["Date"]).dt.date
 
 industrias = {
     "Tecnología": ["AAPL", "MSFT", "NVDA", "INTC", "CSCO"],
@@ -112,10 +111,10 @@ app_ui = ui.page_sidebar(
 
     ui.navset_tab(
         ui.nav_panel( 
-            "Comparación del Precio de Cierre entre Empresas en USD",
+            "Historial de acciones de empresas en USD",
             ui.layout_column_wrap(
                 ui.card(
-                    ui.card_header("Comparación del Precio de Cierre entre Empresas en USD"),
+                    ui.card_header("Historia Precio de Cierre por/entre Empresas en USD"),
                     output_widget("plot_acciones", width="100%", height="420px")
                 ),
                 column_size="100%"

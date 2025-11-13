@@ -13,56 +13,29 @@ df["Date"] = pd.to_datetime(df["Date"]).dt.date  # fechas sin hora
 # Paleta de colores corporativa
 # ================================
 colores_empresas = {
-    "AMZN": "#4DB6AC",   # Teal elegante
-    "KO":   "#EF5350",   # Rojo corporativo suave
-    "UBER": "#FAFAFA",   # Blanco humo
-    "PEP":  "#42A5F5",   # Azul ejecutivo
-    "TSLA": "#FF7043",   # Naranja rojizo
-    "AAPL": "#90CAF9",   # Azul pastel
-    "MSFT": "#FFD54F",   # Amarillo dorado
-    "NVDA": "#66BB6A",   # Verde profesional
-    "NFLX": "#E53935",   # Rojo Netflix
-    "DIS":  "#5C6BC0",   # Azul púrpura
-    "NKE":  "#ECECEC",   # Gris claro
-    "F":    "#29B6F6",   # Azul cyan
-    "WMT": "#81D4FA",    # Azul retail
-    "PFE": "#64B5F6",    # Azul farmacéutico
-    "META": "#4A90E2",   # Meta Blue
-    "GOOG": "#8EACBB",   # Azul gris
-    "MA":   "#FFB74D",   # Orange gold
-    "V":    "#4FC3F7"    # Azul Visa
+    "AMZN": "#2ca02c",  
+    "KO":   "#FF0000",   
+    "UBER": "#000000",   
+    "PEP":  "#005CB8",  
+    "TSLA": "#CC0000",   
+    "AAPL": "#1f77b4",   
+    "MSFT": "#BE8C00",   
+    "NVDA": "#76B900",   
+    "NFLX": "#E50914",   
+    "DIS":  "#113CCF",  
+    "NKE":  "#111111",   
+    "F":    "#003399",   
+    "WMT": "#0071CE",   
+    "PFE": "#0082D1",   
+    "META": "#4267B2",  
+    "GOOG": "#4285F4",  
+    "MA":   "#FF5F00",  
+    "V":    "#0057B8"  
 }
-
-# ================================
-# CSS modo oscuro
-# ================================
-
-dark_theme = ui.tags.style(
-"""
-body { background-color: #0f0f0f; color: #e6e6e6; }
-.sidebar, .card, .form-control, .selectize-input, .selectize-dropdown {
-  background-color: #141414 !important;
-  color: #e6e6e6 !important;
-  border-color: #2b2b2b !important;
-}
-.card-header { background-color: #191919 !important; color: #fff !important; }
-.selectize-control .item {
-  background-color: #262626 !important;
-  color: #e6e6e6 !important;
-  border: 1px solid #303030 !important;
-  padding: 2px 6px;
-  margin-right: 4px;
-}
-.selectize-input { min-height: 38px; width: 100% !important; }
-.card { padding: 12px !important; }
-.legend { font-size: 9px !important; }
-"""
-)
 
 # ================================
 # UI
 # ================================
-
 app_ui = ui.page_sidebar(
     ui.sidebar(
         ui.h2("Panel de Control", class_="my-3"),
@@ -93,18 +66,15 @@ app_ui = ui.page_sidebar(
     ui.layout_column_wrap(
         ui.card(
             ui.card_header("Comparación Interactiva de Acciones"),
-            output_widget("plot_acciones", width="100%", height="420px")  # 👈 aquí corregido
+            output_widget("plot_acciones", width="100%", height="420px")
         ),
         column_size="100%"
-    ),
-
-    dark_theme
+    )
 )
 
 # ================================
 # Server
 # ================================
-
 def server(input, output, session):
 
     @reactive.calc
@@ -131,7 +101,7 @@ def server(input, output, session):
             y_label = "Precio de Cierre (USD)"
             title = "Evolución Histórica del Precio de Cierre"
 
-        # Crear gráfico interactivo
+        # Crear gráfico interactivo (modo claro)
         fig = px.line(
             data,
             x="Date",
@@ -142,18 +112,15 @@ def server(input, output, session):
             title=title
         )
 
-        # Ajustes visuales (tema oscuro)
+        # Ajustes visuales
         fig.update_layout(
-            template="plotly_dark",
+            template="plotly_white",
             legend_title_text="Empresas",
-            font=dict(color="white"),
-            plot_bgcolor="#0f0f0f",
-            paper_bgcolor="#0f0f0f",
+            font=dict(color="black"),
+            plot_bgcolor="white",
+            paper_bgcolor="white",
             margin=dict(l=40, r=30, t=50, b=40)
         )
-
-        fig.update_xaxes(showgrid=True, gridwidth=0.2, gridcolor="#333333")
-        fig.update_yaxes(showgrid=True, gridwidth=0.2, gridcolor="#333333")
 
         return fig
 

@@ -7,7 +7,9 @@ import plotly.express as px
 # Cargar datos
 # ================================
 df = pd.read_csv("Datos.csv")
-df["Date"] = pd.to_datetime(df["Date"]).dt.date  # fechas sin hora
+
+# Convertir fechas correctamente (datetime, NO .dt.date)
+df["Date"] = pd.to_datetime(df["Date"])  
 
 # ================================
 # Paleta de colores corporativa
@@ -39,6 +41,7 @@ colores_empresas = {
 app_ui = ui.page_sidebar(
     ui.sidebar(
         ui.h2("Panel de Control", class_="my-3"),
+
         ui.input_selectize(
             "empresas",
             "Seleccione empresas:",
@@ -46,7 +49,9 @@ app_ui = ui.page_sidebar(
             selected=["MA", "V"],
             multiple=True
         ),
+
         ui.br(),
+
         ui.input_slider(
             "fecha_rango",
             "Rango de Fechas:",
@@ -55,7 +60,9 @@ app_ui = ui.page_sidebar(
             value=(df["Date"].min(), df["Date"].max()),
             step=1
         ),
+
         ui.br(),
+
         ui.input_switch(
             "modo_rend",
             "Mostrar rendimiento acumulado (%)",
@@ -63,13 +70,26 @@ app_ui = ui.page_sidebar(
         ),
     ),
 
-    ui.layout_column_wrap(
-        ui.card(
-            ui.card_header("Comparación Interactiva de Acciones"),
-            output_widget("plot_acciones", width="100%", height="420px")
+    ui.navset_tab(
+        ui.nav_panel( 
+            "Comparación del Precio de Cierre entre Empresas en USD",
+            ui.layout_column_wrap(
+                ui.card(
+                    ui.card_header("Comparación del Precio de Cierre entre Empresas en USD"),
+                    output_widget("plot_acciones", width="100%", height="420px")
+                ),
+                column_size="100%"
+            ),
         ),
-        column_size="100%"
-    )
+
+        ui.nav_panel(
+            "Tabla de Precios",
+            ui.card(
+                ui.card_header("Tabla de precios"),
+                ui.output_data_frame("tabla_precios")
+            )
+        )
+    ),
 )
 
 # ================================
@@ -84,24 +104,26 @@ def server(input, output, session):
 
         fi, ff = input.fecha_rango()
         data = data[(data["Date"] >= fi) & (data["Date"] <= ff)]
+
         data.sort_values(by="Date", inplace=True)
         return data
 
+    # -------- Plot ----------
     @output
     @render_widget
     def plot_acciones():
         data = datos_filtrados().copy()
 
-        # Si el modo rendimiento está activado, calcular %
         if input.modo_rend():
-            data["Close"] = data.groupby("Ticker")["Close"].transform(lambda x: (x / x.iloc[0] - 1) * 100)
+            data["Close"] = data.groupby("Ticker")["Close"].transform(
+                lambda x: (x / x.iloc[0] - 1) * 100
+            )
             y_label = "Rendimiento acumulado (%)"
             title = "Rendimiento Acumulado desde el Inicio del Rango"
         else:
             y_label = "Precio de Cierre (USD)"
             title = "Evolución Histórica del Precio de Cierre"
 
-        # Crear gráfico interactivo (modo claro)
         fig = px.line(
             data,
             x="Date",
@@ -112,17 +134,26 @@ def server(input, output, session):
             title=title
         )
 
-        # Ajustes visuales
         fig.update_layout(
             template="plotly_white",
             legend_title_text="Empresas",
             font=dict(color="black"),
             plot_bgcolor="white",
             paper_bgcolor="white",
-            margin=dict(l=40, r=30, t=50, b=40)
+            margin=dict(l=40, r=30, t=50, b=40),
+            height=420
         )
 
         return fig
+
+    # -------- Tabla ----------
+    @output
+    @render.data_frame
+    def tabla_precios():
+        data = datos_filtrados()
+        columnas = ["Date", "Open", "High", "Low", "Close", "Volume", "Ticker"]
+        data[columnas[1:5]] = data[columnas[1:5]].round(2)
+        return data[columnas].sort_values(by=["Ticker", "Date"])
 
 # ================================
 # Run app

@@ -11,6 +11,15 @@ df = pd.read_csv("Datos.csv")
 # Convertir fechas correctamente (datetime, NO .dt.date)
 df["Date"] = pd.to_datetime(df["Date"])  
 
+industrias = {
+    "Tecnología": ["AAPL", "MSFT", "NVDA", "INTC", "CSCO"],
+    "Servicios de Comunicación": ["META", "GOOG", "NFLX", "DIS", "CMCSA"],
+    "Consumo Cíclico": ["AMZN", "TSLA", "NKE", "F", "SBUX"],
+    "Consumo Defensivo": ["KO", "PEP", "PG", "MDLZ", "BF-B"],
+    "Servicios Financieros": ["JPM", "V", "MA", "GS", "AXP"],
+    "Energía": ["XOM", "CVX", "BP", "TTE", "COP"]
+}
+
 # ================================
 # Paleta de colores corporativa
 # ================================
@@ -66,7 +75,7 @@ app_ui = ui.page_sidebar(
         ui.h2("Panel de Control", class_="my-3"),
 
         # Nuevo filtro por industria
-        ui.input_selectize(
+        ui.input_select(
             "industria",
             "Seleccione industria:",
             choices=list(industrias.keys()),

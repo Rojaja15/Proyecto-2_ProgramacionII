@@ -16,24 +16,47 @@ df["Date"] = pd.to_datetime(df["Date"]).dt.date  # fechas sin hora
 # ================================
 
 colores_empresas = {
-    "AMZN": "#4DB6AC",   # Teal elegante
-    "KO":   "#EF5350",   # Rojo corporativo suave
-    "UBER": "#FAFAFA",   # Blanco humo (destaca sobre negro)
-    "PEP":  "#42A5F5",   # Azul ejecutivo brillante
-    "TSLA": "#FF7043",   # Naranja rojizo financiero
-    "AAPL": "#90CAF9",   # Azul pastel visible
-    "MSFT": "#FFD54F",   # Amarillo dorado suave
-    "NVDA": "#66BB6A",   # Verde profesional
-    "NFLX": "#E53935",   # Rojo Netflix intenso
-    "DIS":  "#5C6BC0",   # Azul púrpura serio
-    "NKE":  "#ECECEC",   # Gris claro corporativo
-    "F":    "#29B6F6",   # Azul cyan suave
-    "WMT": "#81D4FA",    # Azul retail pastel
-    "PFE": "#64B5F6",    # Azul farmacéutico sólido
-    "META": "#4A90E2",   # Meta Blue (versión accesible)
-    "GOOG": "#8EACBB",   # Azul gris tecnología
-    "MA":   "#FFB74D",   # Orange gold financial
-    "V":    "#4FC3F7"    # Azul Visa brillante
+    # Tecnología
+    "AAPL": "#1f77b4",
+    "MSFT": "#BE8C00",
+    "NVDA": "#76B900",
+    "INTC": "#0071C5",
+    "CSCO": "#0096D6",
+
+    # Servicios de Comunicación
+    "META": "#4267B2",
+    "GOOG": "#4285F4",
+    "NFLX": "#E50914",
+    "DIS": "#113CCF",
+    "CMCSA": "#FFC300",
+
+    # Consumo Cíclico
+    "AMZN": "#2ca02c",
+    "TSLA": "#CC0000",
+    "NKE": "#111111",
+    "F": "#003399",
+    "SBUX": "#00704A",
+
+    # Consumo Defensivo
+    "KO": "#FF0000",
+    "PEP": "#005CB8",
+    "PG": "#01BFFF",
+    "MDLZ": "#9B30FF",
+    "BF-B": "#6B8E23",
+
+    # Servicios Financieros
+    "JPM": "#0070C0",
+    "V": "#0057B8",
+    "MA": "#FF5F00",
+    "GS": "#B8860B",
+    "AXP": "#2E77BB",
+
+    # Energía
+    "XOM": "#C70039",
+    "CVX": "#900C3F",
+    "BP": "#009639",
+    "TTE": "#E6B422",
+    "COP": "#FF8000"
 }
 
 # ================================

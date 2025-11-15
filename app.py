@@ -128,11 +128,23 @@ app_ui = ui.page_sidebar(
                 column_size="100%"
             ),
         ),
+        #Panel de tabla
 
         ui.nav_panel(
             "Tabla de Precios",
             ui.card(
                 ui.card_header("Tabla de precios"),
+
+                ui.input_select(
+                    "frecuencia",
+                    "Frecuencia de datos:",
+                    choices={
+                        "diaria": "Diaria",
+                        "mensual_mean": "Mensual (Promedio del mes)"
+                    },
+                    selected="diaria"
+                ),
+
                 ui.output_data_frame("tabla_precios")
             )
         )

@@ -13,10 +13,11 @@ df["Date"] = pd.to_datetime(df["Date"]).dt.date
 industrias = {
     "Tecnología": ["AAPL", "MSFT", "NVDA", "INTC", "CSCO"],
     "Servicios de Comunicación": ["META", "GOOG", "NFLX", "DIS", "CMCSA"],
-    "Consumo Cíclico": ["AMZN", "TSLA", "NKE", "F", "SBUX"],
+    "Consumo Cíclico": ["AMZN", "ADS", "NKE", "COLM", "SBUX"],
     "Consumo Defensivo": ["KO", "PEP", "PG", "MDLZ", "BF-B"],
     "Servicios Financieros": ["JPM", "V", "MA", "GS", "AXP"],
-    "Energía": ["XOM", "CVX", "BP", "TTE", "COP"]
+    "Energía": ["XOM", "CVX", "BP", "TTE", "COP"],
+    "Automotriz": ["TSLA", "F", "TM", "HMC", "RACE"]
 }
 
 # ================================
@@ -39,9 +40,9 @@ colores_empresas = {
 
     # Consumo Cíclico
     "AMZN": "#2ca02c",
-    "TSLA": "#CC0000",
+    "ADS": "#004B87",
     "NKE": "#111111",
-    "F": "#003399",
+    "COLM": "#005F73",
     "SBUX": "#00704A",
 
     # Consumo Defensivo
@@ -63,7 +64,14 @@ colores_empresas = {
     "CVX": "#900C3F",
     "BP": "#009639",
     "TTE": "#E6B422",
-    "COP": "#FF8000"
+    "COP": "#FF8000",
+
+    # Automotriz
+    "TSLA": "#CC0000",
+    "F": "#003399",
+    "TM": "#079213",    
+    "HMC": "#DAC71C",  
+    "RACE": "#FF2800"
 }
 
 # ================================
@@ -85,7 +93,7 @@ app_ui = ui.page_sidebar(
             "empresas",
             "Seleccione empresas:",
             choices=sorted(df["Ticker"].unique()),
-            selected=["MA", "V"],
+            selected=[],
             multiple=True
         ),
 

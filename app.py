@@ -77,11 +77,11 @@ colores_empresas = {
 # ================================
 # UI
 # ================================
+
 app_ui = ui.page_sidebar(
     ui.sidebar(
         ui.h2("Panel de Control", class_="my-3"),
 
-        # Nuevo filtro por industria
         ui.input_select(
             "industria",
             "Seleccione industria:",
@@ -118,7 +118,7 @@ app_ui = ui.page_sidebar(
     ),
 
     ui.navset_tab(
-        ui.nav_panel( 
+        ui.nav_panel(
             "Historial de acciones de empresas en USD",
             ui.layout_column_wrap(
                 ui.card(
@@ -128,7 +128,8 @@ app_ui = ui.page_sidebar(
                 column_size="100%"
             ),
         ),
-        #Panel de tabla
+
+        # Panel de tabla 
 
         ui.nav_panel(
             "Tabla de Precios",
@@ -140,7 +141,7 @@ app_ui = ui.page_sidebar(
                     "Frecuencia de datos:",
                     choices={
                         "diaria": "Diaria",
-                        "mensual_mean": "Mensual (Promedio del mes)"
+                        "mensual_mean": "Mensual"
                     },
                     selected="diaria"
                 ),
@@ -154,9 +155,9 @@ app_ui = ui.page_sidebar(
 # ================================
 # Server
 # ================================
+
 def server(input, output, session):
 
-    # Actualiza empresas al cambiar industria
     @reactive.effect
     def _():
         ind = input.industria()
@@ -174,17 +175,45 @@ def server(input, output, session):
 
         fi, ff = input.fecha_rango()
         data = data[(data["Date"] >= fi) & (data["Date"] <= ff)]
-
         data.sort_values(by="Date", inplace=True)
         return data
 
-    # -------- Plot ----------
+    @reactive.calc
+    def datos_resumen():
+        data = datos_filtrados().copy()
+        freq = input.frecuencia()
+
+        if freq == "diaria":
+            num_cols = ["Open", "High", "Low", "Close", "Volume"]
+            data[num_cols] = data[num_cols].round(2)
+            return data
+
+        # Datos mensuales
+        data["Date"] = pd.to_datetime(data["Date"])
+        num_cols = ["Open", "High", "Low", "Close", "Volume"]
+
+        if freq == "mensual_mean":
+            df_month = (
+                data.set_index("Date")
+                    .groupby("Ticker")[num_cols]
+                    .resample("M")
+                    .mean()
+                    .reset_index()
+            )
+
+        df_month[num_cols] = df_month[num_cols].round(2)
+        return df_month
+
+    # ---------- Plot ----------
+
     @output
     @render_widget
     def plot_acciones():
+        # IMPORTANTE: el gráfico siempre usa datos "diarios", nunca agregados
         data = datos_filtrados().copy()
 
         if input.modo_rend():
+            data = data.sort_values(["Ticker", "Date"])
             data["Close"] = data.groupby("Ticker")["Close"].transform(
                 lambda x: (x / x.iloc[0] - 1) * 100
             )
@@ -216,13 +245,14 @@ def server(input, output, session):
 
         return fig
 
-    # -------- Tabla ----------
+    # ---------- Tabla ----------
+
     @output
     @render.data_frame
     def tabla_precios():
-        data = datos_filtrados()
+        data = datos_resumen().copy()
         columnas = ["Date", "Open", "High", "Low", "Close", "Volume", "Ticker"]
-        data[columnas[1:5]] = data[columnas[1:5]].round(2)
+        data["Date"] = pd.to_datetime(data["Date"]).dt.date
         return data[columnas].sort_values(by=["Ticker", "Date"])
 
 # ================================

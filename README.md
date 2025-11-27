@@ -4,9 +4,8 @@ El proyecto utiliza un archivo CSV (Datos.csv) que contiene información histór
 
 Los datos se cargan con pandas:
 
-`df = pd.read_csv("Datos.csv")`
-
-`df["Date"] = pd.to_datetime(df["Date"]).dt.date`
+df = pd.read_csv("Datos.csv")
+df["Date"] = pd.to_datetime(df["Date"]).dt.date
 
 Columnas requeridas en el archivo:
 + Date

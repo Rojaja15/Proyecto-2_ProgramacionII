@@ -44,14 +44,16 @@ industrias = {
 El diccionario colores_empresas asigna un color específico a cada empresa.
 Este mapa de colores se utiliza en los gráficos de Plotly para mantener consistencia visual.
 
-`colores_empresas = {
+```python
+colores_empresas = {
 
     "AAPL": "#1f77b4",
     
     "MSFT": "#BE8C00",
     
     ...
-}`
+}
+```
 
 Esto asegura que cada empresa mantenga el mismo color sin importar el análisis o el rango de fechas seleccionado.
 
@@ -75,7 +77,9 @@ Pestañas de navegación para:
 
 Incluye un gráfico interactivo en un card:
 
-`output_widget("plot_acciones")`
+```python
+output_widget("plot_acciones")`
+```
 
 ## Panel de Tabla
 
@@ -93,7 +97,9 @@ Incluye:
 
 La lógica de backend se implementa en la función:
 
-`def server(input, output, session):`
+```python
+def server(input, output, session):
+```
 
 Contiene funciones reactivas, efectos, cálculos y renderizados.
 
@@ -102,21 +108,20 @@ Contiene funciones reactivas, efectos, cálculos y renderizados.
 
 Cuando se selecciona una industria, se actualiza la lista de empresas disponibles:
 
-`@reactive.effect
-
+```python
+@reactive.effect
 def _():
-
     ui.update_selectize(...)`
-
+```
 
 Permite que el usuario siempre vea solo los tickers pertenecientes al sector elegido.
 
 ## 6.2. Filtrado de datos según entradas del usuario
 
-`@reactive.calc
-
+```python
+@reactive.calc
 def datos_filtrados():`
-
+```
 
 Esta función:
 
@@ -126,11 +131,11 @@ Esta función:
 + Este es el dataset base para el gráfico.
 
 ## 6.3. Resumen de datos para tabla
-`@reactive.calc
 
+```python
+@reactive.calc
 def datos_resumen():`
-
-
+```
 Dependiendo de la frecuencia seleccionada:
 
 + Diaria: solo redondea valores
@@ -142,12 +147,11 @@ Devuelve un dataframe limpio listo para la tabla.
 
 El gráfico se genera en:
 
-`@output
-
+```python
+@output
 @render_widget
-
 def plot_acciones():`
-
+```
 
 Esta función:
 
@@ -155,7 +159,9 @@ Esta función:
 
 Si el usuario activa `Rendimiento Acumulado`, normaliza el precio:
 
-`data["Close"] = (x / x.iloc[0] - 1) * 100`
+```python
+data["Close"] = (x / x.iloc[0] - 1) * 100
+```
 
 Si no, muestra precios originales.
 
@@ -175,10 +181,11 @@ El resultado es un gráfico interactivo, claro y totalmente dinámico.
 
 La tabla se genera con:
 
-`@output
+```python
+@output
 @render.data_frame
 def tabla_precios():`
-
+```
 
 Muestra las columnas:
 
@@ -197,14 +204,6 @@ Los datos están ordenados por empresa y fecha.
 La aplicación se ejecuta con:
 
 `app = App(app_ui, server)`
-
-Puedes correrla con:
-
-`shiny run --reload app.py`
-
-o simplemente:
-
-python app.py
 
 # Resumen del Flujo Lógico
 

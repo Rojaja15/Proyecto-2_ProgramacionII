@@ -5,6 +5,7 @@ El proyecto utiliza un archivo CSV (Datos.csv) que contiene información histór
 Los datos se cargan con pandas:
 
 `df = pd.read_csv("Datos.csv")`
+
 `df["Date"] = pd.to_datetime(df["Date"]).dt.date`
 
 Columnas requeridas en el archivo:
@@ -15,6 +16,7 @@ Columnas requeridas en el archivo:
 + Low
 + Close
 + Volume
+  
 El sistema convierte la columna Date a formato fecha para permitir filtrado por rango usando la interfaz.
 
 # 2. Diccionario de Industrias
@@ -22,8 +24,11 @@ El sistema convierte la columna Date a formato fecha para permitir filtrado por 
 El código define un diccionario llamado industrias, que agrupa los tickers de distintas compañías según su sector económico:
 
 `industrias = {
+    
     "Tecnología": [...],
+   
     "Servicios de Comunicación": [...],
+   
     ...
 }`
 
@@ -33,82 +38,84 @@ Para actualizar la lista de empresas según la industria seleccionada.
 
 Para mejorar la navegación del usuario dentro del panel lateral.
 
-🎨 3. Paleta de Colores Corporativa
+# 3. Paleta de Colores Corporativa
 
 El diccionario colores_empresas asigna un color específico a cada empresa.
 Este mapa de colores se utiliza en los gráficos de Plotly para mantener consistencia visual.
 
-colores_empresas = {
+`colores_empresas = {
+
     "AAPL": "#1f77b4",
+    
     "MSFT": "#BE8C00",
+    
     ...
-}
+}`
 
 
 Esto asegura que cada empresa mantenga el mismo color sin importar el análisis o el rango de fechas seleccionado.
 
-🖥️ 4. Interfaz de Usuario (UI)
+# 4. Interfaz de Usuario (UI)
 
 La interfaz se construye con ui.page_sidebar(), que crea una página con panel lateral y contenido principal.
 
 Componentes principales del panel lateral:
 
-Selector de Industria
-
-Selector múltiple de Empresas
-
-Slider de rango de fechas
-
-Switch para mostrar rendimiento acumulado
++ Selector de Industria
++ Selector múltiple de Empresas
++ Slider de rango de fechas
++ Switch para mostrar rendimiento acumulado
 
 Pestañas de navegación para:
 
-Gráfico histórico
++ Gráfico histórico
++ Tabla de precios
 
-Tabla de precios
-
-Panel de Gráfico
+## Panel de Gráfico
 
 Incluye un gráfico interactivo en un card:
 
-output_widget("plot_acciones")
+`output_widget("plot_acciones")`
 
-Panel de Tabla
+## Panel de Tabla
 
 Incluye:
 
-Selector de frecuencia:
++ Selector de frecuencia:
 
-Datos diarios
+ - Datos diarios
 
-Promedio mensual
+ - Promedio mensual
 
-Tabla interactiva usando ui.output_data_frame
++ Tabla interactiva usando `ui.output_data_frame`
 
-⚙️ 5. Lógica del Servidor
+## 5. Lógica del Servidor
 
 La lógica de backend se implementa en la función:
 
-def server(input, output, session):
-
+`def server(input, output, session):`
 
 Contiene funciones reactivas, efectos, cálculos y renderizados.
 
-🧩 6. Funciones Reactivas
-6.1. Actualización automática de empresas:
+# 6. Funciones Reactivas
+## 6.1. Actualización automática de empresas:
 
 Cuando se selecciona una industria, se actualiza la lista de empresas disponibles:
 
-@reactive.effect
+`@reactive.effect
+
 def _():
-    ui.update_selectize(...)
+
+    ui.update_selectize(...)`
 
 
 Permite que el usuario siempre vea solo los tickers pertenecientes al sector elegido.
 
-6.2. Filtrado de datos según entradas del usuario
-@reactive.calc
-def datos_filtrados():
+## 6.2. Filtrado de datos según entradas del usuario
+
+`@reactive.calc
+
+def datos_filtrados():`
 
 
 Esta función:

@@ -34,16 +34,17 @@ El código define un diccionario llamado industrias, que agrupa los tickers de d
 
 ¿Para qué se usa?
 
-Para actualizar la lista de empresas según la industria seleccionada.
++ Para actualizar la lista de empresas según la industria seleccionada.
 
-Para mejorar la navegación del usuario dentro del panel lateral.
++ Para mejorar la navegación del usuario dentro del panel lateral.
 
 # 3. Paleta de Colores Corporativa
 
 El diccionario colores_empresas asigna un color específico a cada empresa.
 Este mapa de colores se utiliza en los gráficos de Plotly para mantener consistencia visual.
 
-`colores_empresas = {
+{
+colores_empresas = {
 
     "AAPL": "#1f77b4",
     
@@ -51,7 +52,7 @@ Este mapa de colores se utiliza en los gráficos de Plotly para mantener consist
     
     ...
 }`
-
+}
 
 Esto asegura que cada empresa mantenga el mismo color sin importar el análisis o el rango de fechas seleccionado.
 

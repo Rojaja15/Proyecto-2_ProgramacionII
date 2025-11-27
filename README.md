@@ -4,8 +4,8 @@ El proyecto utiliza un archivo CSV (Datos.csv) que contiene información histór
 
 Los datos se cargan con pandas:
 
-df = pd.read_csv("Datos.csv")
-df["Date"] = pd.to_datetime(df["Date"]).dt.date
+`df = pd.read_csv("Datos.csv")`
+`df["Date"] = pd.to_datetime(df["Date"]).dt.date`
 
 Columnas requeridas en el archivo:
 + Date
@@ -21,11 +21,11 @@ El sistema convierte la columna Date a formato fecha para permitir filtrado por 
 
 El código define un diccionario llamado industrias, que agrupa los tickers de distintas compañías según su sector económico:
 
-industrias = {
+`industrias = {
     "Tecnología": [...],
     "Servicios de Comunicación": [...],
     ...
-}
+}`
 
 ¿Para qué se usa?
 

@@ -26,14 +26,12 @@ El sistema convierte la columna Date a formato fecha para permitir filtrado por 
 
 El código define un diccionario llamado industrias, que agrupa los tickers de distintas compañías según su sector económico:
 
+```python
 industrias = {
-    
     "Tecnología": [...],
-   
     "Servicios de Comunicación": [...],
-   
-    ...
 }
+```
 
 ¿Para qué se usa?
 
